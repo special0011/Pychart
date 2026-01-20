@@ -7,8 +7,334 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tax & Levy Reminder</title>
     
-    <!-- Link to external CSS file for styling -->
-    <link rel="stylesheet" href="style.css">
+    <!-- ========================================= -->
+    <!-- ALL CSS STYLES ARE EMBEDDED HERE -->
+    <!-- ========================================= -->
+    <style>
+        /* ===== RESET AND BASE STYLES ===== */
+        
+        /* Remove default margin and padding from all elements */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Makes width/height calculations easier */
+        }
+        
+        /* Set default font and colors for the entire page */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Purple gradient background */
+            min-height: 100vh; /* At least full screen height */
+            padding: 20px;
+            color: #333;
+        }
+        
+        /* ===== MAIN CONTAINER ===== */
+        
+        /* Container holds all content and centers it */
+        .container {
+            max-width: 800px; /* Maximum width for readability */
+            margin: 0 auto; /* Centers the container */
+            background: white;
+            border-radius: 20px; /* Rounded corners */
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+            overflow: hidden; /* Keeps content inside rounded corners */
+        }
+        
+        /* ===== HEADER ===== */
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2rem; /* 2 times the default size */
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9; /* Slightly transparent */
+        }
+        
+        /* ===== SECTIONS ===== */
+        
+        section {
+            padding: 30px;
+        }
+        
+        section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        /* ===== FORM STYLES ===== */
+        
+        /* Each form field group */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        /* Labels for form inputs */
+        .form-group label {
+            display: block; /* Makes label take full width */
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600; /* Bold text */
+            font-size: 0.9rem;
+        }
+        
+        /* All text inputs, date inputs, and textareas */
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s; /* Smooth color change on focus */
+            font-family: inherit; /* Use same font as body */
+        }
+        
+        /* When user clicks on an input (focused) */
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none; /* Remove default browser outline */
+            border-color: #667eea; /* Change border to purple */
+        }
+        
+        /* ===== BUTTONS ===== */
+        
+        /* Primary button (Add Reminder) */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer; /* Shows hand cursor on hover */
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s; /* Smooth animation */
+        }
+        
+        /* When user hovers over the button */
+        .btn-primary:hover {
+            transform: translateY(-2px); /* Moves button up slightly */
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); /* Adds shadow */
+        }
+        
+        /* When button is clicked */
+        .btn-primary:active {
+            transform: translateY(0); /* Returns to normal position */
+        }
+        
+        /* ===== FILTER BUTTONS ===== */
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px; /* Space between buttons */
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* Buttons wrap to next line on small screens */
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px; /* Pill-shaped buttons */
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        /* Active filter button */
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .filter-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* ===== REMINDERS LIST ===== */
+        
+        .reminders-list {
+            display: flex;
+            flex-direction: column; /* Stack reminders vertically */
+            gap: 15px; /* Space between reminder cards */
+        }
+        
+        /* Individual reminder card */
+        .reminder-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea; /* Colored left border */
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        /* Hover effect on reminder cards */
+        .reminder-card:hover {
+            transform: translateX(5px); /* Slides right slightly */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Different colors for different urgency levels */
+        .reminder-card.urgent {
+            border-left-color: #ff4757; /* Red for urgent */
+            background: #fff5f5;
+        }
+        
+        .reminder-card.overdue {
+            border-left-color: #ff6348; /* Dark red for overdue */
+            background: #fff0f0;
+        }
+        
+        .reminder-card.upcoming {
+            border-left-color: #ffa502; /* Orange for upcoming */
+            background: #fff8f0;
+        }
+        
+        /* Header of each reminder card */
+        .reminder-header {
+            display: flex;
+            justify-content: space-between; /* Space between title and buttons */
+            align-items: start;
+            margin-bottom: 15px;
+        }
+        
+        .reminder-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            flex: 1; /* Takes up available space */
+        }
+        
+        /* Status badge (Urgent, Overdue, etc.) */
+        .reminder-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .status-urgent {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .status-overdue {
+            background: #ff6348;
+            color: white;
+        }
+        
+        .status-upcoming {
+            background: #ffa502;
+            color: white;
+        }
+        
+        .status-normal {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* Reminder details */
+        .reminder-details {
+            margin-bottom: 15px;
+        }
+        
+        .reminder-detail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #666;
+        }
+        
+        .reminder-detail strong {
+            min-width: 100px; /* Aligns all values */
+            color: #333;
+        }
+        
+        /* Notes section in reminder */
+        .reminder-notes {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        /* Delete button */
+        .btn-delete {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+        }
+        
+        .btn-delete:hover {
+            background: #ff3838;
+        }
+        
+        /* Message shown when no reminders exist */
+        .no-reminders {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-size: 1.1rem;
+        }
+        
+        /* ===== RESPONSIVE DESIGN FOR MOBILE ===== */
+        
+        /* For screens smaller than 600px (most phones) */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 1.5rem; /* Smaller title on mobile */
+            }
+            
+            section {
+                padding: 20px;
+            }
+            
+            .reminder-header {
+                flex-direction: column; /* Stack title and status vertically */
+            }
+            
+            .reminder-title {
+                margin-bottom: 10px;
+            }
+            
+            .filter-buttons {
+                gap: 8px;
+            }
+            
+            .filter-btn {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Main container that holds everything -->
@@ -103,7 +429,144 @@
         </section>
     </div>
 
-    <!-- Link to external JavaScript file -->
-    <script src="script.js"></script>
-</body>
-  </html>
+    <!-- ========================================= -->
+    <!-- ALL JAVASCRIPT CODE IS EMBEDDED HERE -->
+    <!-- ========================================= -->
+    <script>
+        // ===== INITIALIZE APP =====
+        
+        // This array will store all reminders
+        // We load existing reminders from localStorage when page loads
+        let reminders = JSON.parse(localStorage.getItem('taxReminders')) || [];
+        
+        // Current filter selected (all, urgent, upcoming, overdue)
+        let currentFilter = 'all';
+        
+        // ===== WAIT FOR PAGE TO LOAD =====
+        
+        // This code runs when the entire HTML page has loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Get the form element from HTML
+            const form = document.getElementById('reminderForm');
+            
+            // Get all filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            
+            // When form is submitted, run addReminder function
+            form.addEventListener('submit', addReminder);
+            
+            // Add click event to each filter button
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove 'active' class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add 'active' class to clicked button
+                    this.classList.add('active');
+                    // Get the filter type from button's data-filter attribute
+                    currentFilter = this.getAttribute('data-filter');
+                    // Display reminders based on new filter
+                    displayReminders();
+                });
+            });
+            
+            // Display all existing reminders when page loads
+            displayReminders();
+        });
+        
+        // ===== ADD NEW REMINDER FUNCTION =====
+        
+        function addReminder(e) {
+            // Prevent form from refreshing the page (default behavior)
+            e.preventDefault();
+            
+            // Get values from form inputs using their IDs
+            const orgName = document.getElementById('orgName').value;
+            const taxType = document.getElementById('taxType').value;
+            const dueDate = document.getElementById('dueDate').value;
+            const amount = document.getElementById('amount').value;
+            const notes = document.getElementById('notes').value;
+            
+            // Create a reminder object with all the information
+            const reminder = {
+                id: Date.now(), // Unique ID using current timestamp
+                orgName: orgName,
+                taxType: taxType,
+                dueDate: dueDate,
+                amount: amount,
+                notes: notes,
+                createdAt: new Date().toISOString() // When reminder was created
+            };
+            
+            // Add the new reminder to our array
+            reminders.push(reminder);
+            
+            // Save all reminders to localStorage (browser storage)
+            // JSON.stringify converts JavaScript object to text
+            localStorage.setItem('taxReminders', JSON.stringify(reminders));
+            
+            // Clear all form fields
+            document.getElementById('reminderForm').reset();
+            
+            // Update the display to show new reminder
+            displayReminders();
+        }
+        
+        // ===== DISPLAY REMINDERS FUNCTION =====
+        
+        function displayReminders() {
+            // Get the div where we'll display reminders
+            const remindersList = document.getElementById('remindersList');
+            
+            // Filter reminders based on current filter
+            let filteredReminders = filterReminders(reminders, currentFilter);
+            
+            // Sort reminders by due date (earliest first)
+            filteredReminders.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+            
+            // If no reminders, show a message
+            if (filteredReminders.length === 0) {
+                remindersList.innerHTML = '<p class="no-reminders">No reminders found for this filter.</p>';
+                return;
+            }
+            
+            // Clear the list
+            remindersList.innerHTML = '';
+            
+            // Loop through each reminder and create HTML for it
+            filteredReminders.forEach(reminder => {
+                // Create a div element for this reminder
+                const card = document.createElement('div');
+                card.className = 'reminder-card';
+                
+                // Calculate days until due date
+                const daysUntil = calculateDaysUntil(reminder.dueDate);
+                
+                // Determine urgency level
+                const urgency = getUrgency(daysUntil);
+                
+                // Add urgency class to card
+                card.classList.add(urgency.class);
+                
+                // Build the HTML content for this reminder card
+                card.innerHTML = `
+                    <div class="reminder-header">
+                        <div>
+                            <div class="reminder-title">${reminder.orgName}</div>
+                            <span class="reminder-status status-${urgency.class}">${urgency.label}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="reminder-details">
+                        <div class="reminder-detail">
+                            <strong>Tax/Levy:</strong> ${reminder.taxType}
+                        </div>
+                        <div class="reminder-detail">
+                            <strong>Due Date:</strong> ${formatDate(reminder.dueDate)} (${daysUntil >= 0 ? daysUntil + ' days left' : Math.abs(daysUntil) + ' days overdue'})
+                        </div>
+                        ${reminder.amount ? `
+                        <div class="reminder-detail">
+                            <strong>Amount:</strong> $${parseFloat(reminder.amount).toLocaleString()}
+                        </div>
+                        ` : ''}
+  
