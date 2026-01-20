@@ -1,1 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags tell the browser how to display the page -->
+    <meta charset="UTF-8">
+    <!-- Makes the website responsive on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax & Levy Reminder</title>
+    
+    <!-- Link to external CSS file for styling -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main container that holds everything -->
+    <div class="container">
+        
+        <!-- Header section with title -->
+        <header>
+            <h1>📋 Tax & Levy Reminder</h1>
+            <p class="subtitle">Never miss a payment deadline</p>
+        </header>
 
+        <!-- Form section where users add new reminders -->
+        <section class="add-reminder-section">
+            <h2>Add New Reminder</h2>
+            
+            <!-- Form with ID so JavaScript can access it -->
+            <form id="reminderForm">
+                
+                <!-- Input for organization name -->
+                <div class="form-group">
+                    <label for="orgName">Company/School/Brand Name:</label>
+                    <input 
+                        type="text" 
+                        id="orgName" 
+                        placeholder="e.g., ABC Corporation" 
+                        required>
+                    <!-- 'required' means this field must be filled -->
+                </div>
+
+                <!-- Input for tax/levy type -->
+                <div class="form-group">
+                    <label for="taxType">Tax/Levy Type:</label>
+                    <input 
+                        type="text" 
+                        id="taxType" 
+                        placeholder="e.g., VAT, Property Tax, Business Levy" 
+                        required>
+                </div>
+
+                <!-- Input for due date -->
+                <div class="form-group">
+                    <label for="dueDate">Due Date:</label>
+                    <input 
+                        type="date" 
+                        id="dueDate" 
+                        required>
+                    <!-- 'type="date"' creates a date picker -->
+                </div>
+
+                <!-- Input for amount (optional) -->
+                <div class="form-group">
+                    <label for="amount">Amount (Optional):</label>
+                    <input 
+                        type="number" 
+                        id="amount" 
+                        placeholder="e.g., 50000" 
+                        step="0.01">
+                    <!-- 'step="0.01"' allows decimal numbers -->
+                </div>
+
+                <!-- Textarea for additional notes -->
+                <div class="form-group">
+                    <label for="notes">Notes (Optional):</label>
+                    <textarea 
+                        id="notes" 
+                        rows="3" 
+                        placeholder="Any additional information..."></textarea>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn-primary">Add Reminder</button>
+            </form>
+        </section>
+
+        <!-- Section that displays all reminders -->
+        <section class="reminders-section">
+            <h2>Upcoming Reminders</h2>
+            
+            <!-- Filter buttons to sort reminders -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="urgent">Urgent (7 days)</button>
+                <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+                <button class="filter-btn" data-filter="overdue">Overdue</button>
+            </div>
+
+            <!-- This div will be filled with reminders by JavaScript -->
+            <div id="remindersList" class="reminders-list">
+                <!-- Reminders will appear here dynamically -->
+                <p class="no-reminders">No reminders yet. Add your first one above!</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Link to external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+  </html>
